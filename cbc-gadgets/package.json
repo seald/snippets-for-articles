@@ -1,5 +1,5 @@
 {
-  "name": "weak-prng",
+  "name": "cbc-gadgets",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -7,9 +7,7 @@
     "prestart": "npm run build",
     "start": "node index.js"
   },
-  "dependencies": {
-    "z3-solver": "^4.12.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.8.7",
     "typescript": "^5.2.2"
