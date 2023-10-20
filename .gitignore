@@ -1,0 +1,7 @@
+weak-prng/*.js
+weak-prng/*.map
+
+.idea/
+.DS_Store
+
+node_modules

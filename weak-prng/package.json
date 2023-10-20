@@ -1,0 +1,20 @@
+{
+  "name": "weak-prng",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node index.js",
+    "pretest": "npm run build",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "xorshift": "^1.2.0",
+    "z3-solver": "^4.12.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "typescript": "^5.2.2"
+  }
+}
