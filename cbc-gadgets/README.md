@@ -10,4 +10,4 @@ Nothing in this repository should be used for production (especially the `encryp
 In Node.js, run `npm install && npm start`.
 
 # Acknowledgments
-I based the implementation of the CBC gadget out of the vulnerability known as [efail](https://www.efail.de) which impacted most email clients in which S/MIME or GPG encryption is implemented which did not check the MAC, therefore the ciphertext was malleable to an attacker who could MITM the encrypted emails, and the email client which displays HTML would use the injected tag to exfiltrate sensitive data.
+I based the implementation of the CBC gadget out of the vulnerability known as [efail](https://efail.de) which impacted most email clients in which S/MIME or GPG encryption is implemented which did not check the MAC, therefore the ciphertext was malleable to an attacker who could MITM the encrypted emails, and the email client which displays HTML would use the injected tag to exfiltrate sensitive data.

@@ -1,5 +1,5 @@
-weak-prng/*.js
-weak-prng/*.map
+*.js
+*.map
 
 .idea/
 .DS_Store

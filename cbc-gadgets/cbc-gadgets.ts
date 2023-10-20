@@ -3,7 +3,8 @@ import {Buffer} from 'node:buffer'
 const xor = (buf1: Buffer, buf2: Buffer): Buffer => Buffer.from(buf1.map((b, i) => b ^ buf2[i]))
 
 /**
- *
+ * Function to inject gadget0 and gadget1 instead of the first block.
+ * Heavily based out of https://efail.de/
  * @param encryptedData the encrypted data with AES-CBC
  * @param p0 the plaintext value of the first block of the message
  * @param gadget0 The plaintext value of the first block to inject which will replace p0
@@ -14,7 +15,7 @@ export const injectGadget = (encryptedData: Buffer, p0: Buffer, gadget0: Buffer,
     const c0: Buffer = encryptedData.subarray(16, 32) // contains p0 (known), encrypted
     const c1: Buffer = encryptedData.subarray(32) // contains the rest, therefore p1 (unknown), encrypted
 
-    const x: Buffer = xor(iv, p0)
+    const x: Buffer = xor(iv, p0) // canonical plaintext (all 0 if decrypted)
 
     const x0: Buffer = xor(x, gadget0)
     const x1: Buffer = xor(x, gadget1)
