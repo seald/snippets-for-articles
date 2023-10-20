@@ -6,8 +6,6 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node index.js",
-    "pretest": "npm run build",
-    "test": "node test.js"
   },
   "dependencies": {
     "xorshift": "^1.2.0",
