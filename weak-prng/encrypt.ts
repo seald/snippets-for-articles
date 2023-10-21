@@ -1,5 +1,5 @@
 import {Buffer} from 'node:buffer'
-import {Cipher, createCipheriv, createDecipheriv, createHmac, Hmac} from 'node:crypto'
+import {Cipher, Decipher, createCipheriv, createDecipheriv, createHmac, Hmac} from 'node:crypto'
 
 /**
  * AES-CBC encryption with 32 bytes keys, 16 bytes IV followed by an HMAC-SHA256 with a 32 bytes key
@@ -31,6 +31,6 @@ export const checkMacThenDecrypt = (encryptedData: Buffer, keyEnc: Buffer, keyMa
 
     const iv: Buffer = ivAndCiphertext.subarray(0,16)
     const ciphertext: Buffer = ivAndCiphertext.subarray(16)
-    const decipher: Cipher  = createDecipheriv('aes-256-cbc', keyEnc, iv)
+    const decipher: Decipher  = createDecipheriv('aes-256-cbc', keyEnc, iv)
     return Buffer.concat([decipher.update(ciphertext), decipher.final()])
 }

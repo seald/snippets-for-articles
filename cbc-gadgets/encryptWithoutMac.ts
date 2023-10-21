@@ -1,5 +1,5 @@
 import {Buffer} from 'node:buffer'
-import {Cipher, createCipheriv, createDecipheriv, createHmac, Hmac, randomBytes} from 'node:crypto'
+import {Cipher, Decipher, createCipheriv, createDecipheriv, randomBytes} from 'node:crypto'
 
 /**
  * AES-CBC encryption with 32 bytes keys, 16 bytes IV
@@ -18,6 +18,6 @@ export const encrypt = (message: Buffer, keyEnc: Buffer): Buffer => {
 export const decrypt = (encryptedData: Buffer, keyEnc: Buffer): Buffer => {
     const iv: Buffer = encryptedData.subarray(0, 16)
     const ciphertext: Buffer = encryptedData.subarray(16)
-    const decipher: Cipher = createDecipheriv('aes-256-cbc', keyEnc, iv)
+    const decipher: Decipher = createDecipheriv('aes-256-cbc', keyEnc, iv)
     return Buffer.concat([decipher.update(ciphertext), decipher.final()])
 }
