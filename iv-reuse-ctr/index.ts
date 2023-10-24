@@ -17,12 +17,12 @@ if (message1.length !== message2.length) throw new Error('demo will not work, me
 if (!xor(paddedMessage1, paddedMessage2).equals(Buffer.concat([message1, message2]))) throw new Error('demo will not work, padding is incorrect')
 
 const reuseIVAndDecrypt = () => {
-    // Alice is negligent and does not rotate properly the IV for a given key, and magically shares the key with Bob
-    const iv = randomBytes(16)
+    // Alice is negligent and does not rotate properly the nonce for a given key, and magically shares the key with Bob
+    const nonce = randomBytes(16)
     const key = randomBytes(32)
 
-    const encryptedMessage1 = encryptCTR(iv, paddedMessage1, key)
-    const encryptedMessage2 = encryptCTR(iv, paddedMessage2, key)
+    const encryptedMessage1 = encryptCTR(nonce, paddedMessage1, key)
+    const encryptedMessage2 = encryptCTR(nonce, paddedMessage2, key)
 
     // Bob naively decrypts the messages:
     const decryptedMessage1 = decryptCTR(encryptedMessage1, key)
@@ -31,7 +31,7 @@ const reuseIVAndDecrypt = () => {
     console.log('Bob (m1):', decryptedMessage1.toString('utf8'))
     console.log('Bob (m2):', decryptedMessage2.toString('utf8'))
 
-    // reusing the same iv + key outputs the same keystream in any stream cipher like AES-CTR
+    // reusing the same nonce + key outputs the same keystream in any stream cipher like AES-CTR
     // E(m1) = keyStream ^ m1
     // E(m2) = keyStream ^ m2
     // XORing the encrypted outputs gives the following:
@@ -40,7 +40,7 @@ const reuseIVAndDecrypt = () => {
     // = m1 ^ keyStream ^ keyStream ^ m2
     // = m1 ^ 0 ^ m2
     // = m1 ^ m2
-    // which means that xoring the output of two encrypted messages with the same {key, iv} equates to xoring the two
+    // which means that xoring the output of two encrypted messages with the same {key, nonce} equates to xoring the two
     // plaintext messages
     const xorResult = xor(encryptedMessage1.subarray(16), encryptedMessage2.subarray(16))
 

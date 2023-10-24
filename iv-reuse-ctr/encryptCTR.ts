@@ -1,10 +1,10 @@
 import {Buffer} from 'node:buffer'
 import {Cipher, Decipher, createCipheriv, createDecipheriv} from 'node:crypto'
 
-export const encryptCTR = (iv: Buffer, message: Buffer, keyEnc: Buffer): Buffer => {
-    const cipher: Cipher = createCipheriv('aes-256-ctr', keyEnc, iv)
+export const encryptCTR = (nonce: Buffer, message: Buffer, keyEnc: Buffer): Buffer => {
+    const cipher: Cipher = createCipheriv('aes-256-ctr', keyEnc, nonce)
 
-    return Buffer.concat([iv, cipher.update(message), cipher.final()])
+    return Buffer.concat([nonce, cipher.update(message), cipher.final()])
 }
 
 export const decryptCTR = (message: Buffer, keyEnc: Buffer): Buffer => {

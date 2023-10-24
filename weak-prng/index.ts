@@ -37,6 +37,7 @@ const breakKeyFromMessageIVsAndDecrypt = async ({encryptedMessage1, encryptedMes
 
     // we get back 4 numbers
     const numbers = bytesToFloats(bytes)
+    console.log(numbers)
     // from those 4 numbers, we retrieve the PRNG state after 14 calls to Math.random
     let state: State = await findXorShiftStates(numbers)
 
